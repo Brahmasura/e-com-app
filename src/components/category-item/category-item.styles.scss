@@ -14,10 +14,10 @@
     justify-content: center;
     border: 1px solid black;
     margin: 0 7.5px 15px;
-    overflow: hidden;
+    overflow:hidden;
   
     &:hover {
-      cursor: pointer;
+      cursor:pointer;
   
       & .background-image {
         transform: scale(1.1);
