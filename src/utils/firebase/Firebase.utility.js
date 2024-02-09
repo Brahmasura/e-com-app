@@ -23,14 +23,21 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
-const provider = new GoogleAuthProvider();
+// now the provider below is for the google auth provider which means it will provide the authorization for the 
+// google sign up, similary we can leverage the FacebookAuthProvider for the facebook Auth
+const googleProvider = new GoogleAuthProvider();
 
-provider.setCustomParameters({
+googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
+
+// following code is for the signInWithGooglePopup
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+
+// next line of code is for the singInWithGoogleRedirect
+export const signInWithGoogleRedirect = () => signInWithGoogleRedirect(auth, googleProvider);
 
 // now the remaining firestore db code begins, now here the "db" indicates the instance of the database in the firestore
 // and we have to pass the db for multiple operations
