@@ -4,6 +4,9 @@ import {
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
+
+  // now the following method is a native provider and that's why we will using the mentioned method for signUpWithEmailandPassword
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 
 // now here the database from firestore part begins
@@ -37,7 +40,7 @@ export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
 
 // next line of code is for the singInWithGoogleRedirect
-export const signInWithGoogleRedirect = () => signInWithGoogleRedirect(auth, googleProvider);
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 // now the remaining firestore db code begins, now here the "db" indicates the instance of the database in the firestore
 // and we have to pass the db for multiple operations
@@ -45,7 +48,11 @@ export const db = getFirestore();
 
 // now creating an exclusive method or function to create a user document from authorization
 
-export const createUserDocumentFromAuth = async (userAuth) => {
+export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
+  if(!userAuth) return;
+  // above line simply means that if we don't get the userAuth then simply return
+
+
   const userDocRef = doc(db, "users", userAuth.uid);
 
   // console.log(userDocRef);
@@ -69,6 +76,7 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         displayName,
         email,
         createdAt,
+        ...additionalInformation,
       });
     } catch (error) {
       console.log("error creating the user", error.messsage);
@@ -80,3 +88,13 @@ export const createUserDocumentFromAuth = async (userAuth) => {
 
   // and with the code above the user that is logged in his/her data will get automatically saved in the firestore db
 };
+
+
+
+/* hre in the function below we are creating for creating user auth with email and password and hence the email and
+password needs to be passed down so it will check if it exists if not then return and if yes then feed it */
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+if(!email || !password) return;
+
+return await createUserWithEmailAndPassword(auth, email, password);
+}
