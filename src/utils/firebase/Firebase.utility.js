@@ -7,6 +7,9 @@ import {
 
   // now the following method is a native provider and that's why we will using the mentioned method for signUpWithEmailandPassword
   createUserWithEmailAndPassword,
+
+  // firebase also has the following method to singIn using email and password, provded the user exists already
+  signInWithEmailAndPassword
 } from "firebase/auth";
 
 // now here the database from firestore part begins
@@ -98,3 +101,12 @@ if(!email || !password) return;
 
 return await createUserWithEmailAndPassword(auth, email, password);
 }
+
+
+
+// following function is for the user to sign in using email and password 
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+  if(!email || !password) return;
+  
+  return await signInWithEmailAndPassword(auth, email, password);
+  }

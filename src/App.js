@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./Routes/navigation/navigation.component";
 import Home from "./Routes/home/home.component";
-import SignIn from "./Routes/sign-in/Sign-In.component";
+import Authentication from "./Routes/authentication/authentication.component";
+
 
 
 
@@ -21,7 +22,7 @@ const App = () => {
         <Route path="/" element={<Navigation />}>
           <Route index element={<Home />} />
           <Route path="shop" element={<Shop />} />
-          <Route path="signIn" element={<SignIn/>} />
+          <Route path="auth" element={<Authentication/>} />
         </Route>
       </Routes>
     </BrowserRouter>
