@@ -4,12 +4,18 @@ import {
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
-
-  // now the following method is a native provider and that's why we will using the mentioned method for signUpWithEmailandPassword
+ // now the following method is a native provider and that's why we will using the mentioned method for signUpWithEmailandPassword
   createUserWithEmailAndPassword,
 
-  // firebase also has the following method to singIn using email and password, provded the user exists already
-  signInWithEmailAndPassword
+ // firebase also has the following method to singIn using email and password, provded the user exists already
+  signInWithEmailAndPassword,
+
+  // now the followoing method is for the sign out
+  signOut,
+
+
+  // now the method below is for observing various signing in, singing up and signing out state changes
+  onAuthStateChanged
 } from "firebase/auth";
 
 // now here the database from firestore part begins
@@ -110,3 +116,11 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
   
   return await signInWithEmailAndPassword(auth, email, password);
   }
+
+
+  // now the following function is for the signing out the user
+  export const signOutUser = async() => await signOut(auth);
+
+
+  // below is the helper function for the onAuthStateChanged observer method 
+  export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback )

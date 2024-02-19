@@ -9,6 +9,10 @@ import Button from "../button/button.component";
 
 
 const SignUpForm = () => {
+
+
+
+
   //    initialising the form objects
   const defaultFormFields = {
     displayName: "",
@@ -62,6 +66,11 @@ const SignUpForm = () => {
       );
 
       await createUserDocumentFromAuth(user, { displayName });
+
+      // below we are using the setcurrentUser from the usercontext
+      // setCurrentUser(user);
+
+
       alert("form submitted successfully!!");
       resetFormFields();
     } catch (error) {

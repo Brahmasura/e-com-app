@@ -2,13 +2,19 @@ import { useState } from "react";
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
-  signInAuthUserWithEmailAndPassword
+  signInAuthUserWithEmailAndPassword,
 } from "../../utils/firebase/Firebase.utility";
 import FormInput from "../form-input/form-input.component";
 import "./sign-in-form.styles.scss";
 import Button from "../button/button.component";
 
 const SignInForm = () => {
+  // now we will be using the context values here in the component and for that we need the useContext and also the UserContext
+  // but note that once we have imported the values from the context, we will only be using the
+  // values that are being needed by us
+
+  // const { setCurrentUser } = useContext(UserContext);
+
   //    initialising the form objects
   const defaultFormFields = {
     email: "",
@@ -16,7 +22,6 @@ const SignInForm = () => {
   };
 
   const [formFields, setFormFields] = useState(defaultFormFields);
-
   const { email, password } = formFields;
 
   console.log(formFields);
@@ -35,29 +40,32 @@ const SignInForm = () => {
     e.preventDefault();
 
     try {
-        const response = await signInAuthUserWithEmailAndPassword(email, password);
-        console.log("response", response);
+      const { user } = await signInAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
+
+      // and then in the end just make all the fields empty
       resetFormFields();
     } catch (error) {
+      switch (error.code) {
+        case "auth/wrong-password":
+          alert("incorrect password for the email");
+          break;
 
-        switch(error.code){
-            case "auth/wrong-password" : 
-            alert("incorrect password for the email");
-            break;
+        case "auth/user-not-found":
+          alert("User not found, kindly sign up!!");
+          break;
 
-            case "auth/user-not-found" : alert("User not found, kindly sign up!!");
-            break;
-
-            default : console.log(error);
-        }
-       
+        default:
+          console.log(error);
+      }
     }
   };
 
   // following function for the google sign up option
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup();
   };
 
   return (

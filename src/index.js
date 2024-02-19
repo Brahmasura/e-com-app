@@ -1,13 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.scss';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.scss";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import { UserProvider } from "./contexts/user.context";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* also note that here i have used the browser router in the index.js and not in the app.js file */}
+    <BrowserRouter>
+      {/* now here is where we are using the UserProvider */}
+      <UserProvider>
+        <App />
+      </UserProvider>
+      {/* now as we can see that the app compo is wrapped inside the userProvider and hence it can access the values inside it */}
+    </BrowserRouter>
   </React.StrictMode>
 );
 
