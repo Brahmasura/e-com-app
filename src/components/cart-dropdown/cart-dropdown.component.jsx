@@ -6,17 +6,23 @@ import CartItem from "../cart-item/cart-item.component";
 import { useNavigate } from "react-router-dom";
 
 const CartDropdown = () => {
-
+  
   const navigate = useNavigate();
 
   const goToCheckoutHandler = () => {
     navigate("/checkout");
-  }
-    const {cartItems} = useContext(CartContext);
+  };
+  const { cartItems } = useContext(CartContext);
+
+  console.log("items no.", cartItems.length);
   return (
     <div className="cart-dropdown-container">
       <div className="cart-items">
-        {cartItems.map(item => <CartItem key={item.id} cartItem={item}/>)}
+        {cartItems.length ? (
+          cartItems.map((item) => <CartItem key={item.id} cartItem={item} />)
+        ) : (
+          <span>Your cart is empty</span>
+        )}
       </div>
       <Button onClick={goToCheckoutHandler}>Go To Checkout</Button>
     </div>

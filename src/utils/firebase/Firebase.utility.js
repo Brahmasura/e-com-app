@@ -4,22 +4,22 @@ import {
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
- // now the following method is a native provider and that's why we will using the mentioned method for signUpWithEmailandPassword
+  // now the following method is a native provider and that's why we will using the mentioned method for signUpWithEmailandPassword
   createUserWithEmailAndPassword,
 
- // firebase also has the following method to singIn using email and password, provded the user exists already
+  // firebase also has the following method to singIn using email and password, provded the user exists already
   signInWithEmailAndPassword,
 
   // now the followoing method is for the sign out
   signOut,
 
-
   // now the method below is for observing various signing in, singing up and signing out state changes
-  onAuthStateChanged
+  onAuthStateChanged,
 } from "firebase/auth";
 
 // now here the database from firestore part begins
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, collection, writeBatch, query, getDocs  } from "firebase/firestore";
+import { useAsyncError } from "react-router-dom";
 // here the getFirestore is to use the functionality of the firestore, the "doc" is to get the instance of the document,
 // the "getDoc" is to get a particular document and the "setDoc" is to modify or set a particular document
 
@@ -35,7 +35,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
-// now the provider below is for the google auth provider which means it will provide the authorization for the 
+// now the provider below is for the google auth provider which means it will provide the authorization for the
 // google sign up, similary we can leverage the FacebookAuthProvider for the facebook Auth
 const googleProvider = new GoogleAuthProvider();
 
@@ -43,24 +43,56 @@ googleProvider.setCustomParameters({
   prompt: "select_account",
 });
 
-
 // following code is for the signInWithGooglePopup
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
 
 // next line of code is for the singInWithGoogleRedirect
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, googleProvider);
 
 // now the remaining firestore db code begins, now here the "db" indicates the instance of the database in the firestore
 // and we have to pass the db for multiple operations
 export const db = getFirestore();
 
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log("done");
+}
+
+
+// now to pull the data from firestore
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, "categories");
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items} = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+}
+
 // now creating an exclusive method or function to create a user document from authorization
 
-export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
-  if(!userAuth) return;
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  additionalInformation = {}
+) => {
+  if (!userAuth) return;
   // above line simply means that if we don't get the userAuth then simply return
-
 
   const userDocRef = doc(db, "users", userAuth.uid);
 
@@ -98,29 +130,24 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
   // and with the code above the user that is logged in his/her data will get automatically saved in the firestore db
 };
 
-
-
 /* hre in the function below we are creating for creating user auth with email and password and hence the email and
 password needs to be passed down so it will check if it exists if not then return and if yes then feed it */
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
-if(!email || !password) return;
+  if (!email || !password) return;
 
-return await createUserWithEmailAndPassword(auth, email, password);
-}
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
 
-
-
-// following function is for the user to sign in using email and password 
+// following function is for the user to sign in using email and password
 export const signInAuthUserWithEmailAndPassword = async (email, password) => {
-  if(!email || !password) return;
-  
+  if (!email || !password) return;
+
   return await signInWithEmailAndPassword(auth, email, password);
-  }
+};
 
+// now the following function is for the signing out the user
+export const signOutUser = async () => await signOut(auth);
 
-  // now the following function is for the signing out the user
-  export const signOutUser = async() => await signOut(auth);
-
-
-  // below is the helper function for the onAuthStateChanged observer method 
-  export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback )
+// below is the helper function for the onAuthStateChanged observer method
+export const onAuthStateChangedListener = (callback) =>
+  onAuthStateChanged(auth, callback);
