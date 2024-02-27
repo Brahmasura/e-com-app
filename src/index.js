@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     {/* also note that here i have used the browser router in the index.js and not in the app.js file */}
-    <BrowserRouter>
+    <BrowserRouter basename="/e-com-app">
       {/* now here is where we are using the UserProvider */}
       <UserProvider>
         <CategoriesProvider>
