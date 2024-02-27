@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/e-com-app/static/css/main.c6ccbf76.css",
+    "main.js": "/e-com-app/static/js/main.3bf992ea.js",
+    "static/js/787.dba80a51.chunk.js": "/e-com-app/static/js/787.dba80a51.chunk.js",
+    "static/media/shopping-bag.svg": "/e-com-app/static/media/shopping-bag.a688874f6f1507316bdfa420328a4a53.svg",
+    "static/media/crown.svg": "/e-com-app/static/media/crown.3a4e2b15908e7a4c25343677d232b7e6.svg",
+    "index.html": "/e-com-app/index.html",
+    "main.c6ccbf76.css.map": "/e-com-app/static/css/main.c6ccbf76.css.map",
+    "main.3bf992ea.js.map": "/e-com-app/static/js/main.3bf992ea.js.map",
+    "787.dba80a51.chunk.js.map": "/e-com-app/static/js/787.dba80a51.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c6ccbf76.css",
+    "static/js/main.3bf992ea.js"
+  ]
+}
