@@ -1,14 +1,15 @@
 import { useState } from "react";
 import {
   signInWithGooglePopup,
-  createUserDocumentFromAuth,
   signInAuthUserWithEmailAndPassword,
 } from "../../utils/firebase/Firebase.utility";
 import FormInput from "../form-input/form-input.component";
 import "./sign-in-form.styles.scss";
 import Button from "../button/button.component";
+// import { setCurrentUser } from "../../store/user/user.action";
 
 const SignInForm = () => {
+
   // now we will be using the context values here in the component and for that we need the useContext and also the UserContext
   // but note that once we have imported the values from the context, we will only be using the
   // values that are being needed by us
@@ -24,7 +25,7 @@ const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  console.log(formFields);
+  // console.log(formFields);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,13 +39,14 @@ const SignInForm = () => {
   // now the following function is for the functionality for creating a user with email and password
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
-      const { user } = await signInAuthUserWithEmailAndPassword(
+      await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
 
+     
       // and then in the end just make all the fields empty
       resetFormFields();
     } catch (error) {
